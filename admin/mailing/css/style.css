@@ -1,0 +1,25 @@
+@import url("reset.css");
+#table_id_wrapper{
+    width:700px;
+    float:right;
+    margin:10px 10px 0 0;
+
+}
+
+.add{
+    float:left;
+    margin:10px;
+}
+.status{
+    height:100%;
+    width:400px;
+    float:left;
+    font-size:13px;
+}
+
+span.red{
+    color:red;
+}
+span.green{
+    color:green;
+}

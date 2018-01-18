@@ -1,0 +1,342 @@
+body {
+    font-family: Helvetica, serif;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    background: #f1f1f1;
+}
+
+div,input,p{
+    outline:0;
+}
+
+
+.login {
+    margin: auto;
+    width:100%;
+}
+
+.anket_header {
+    line-height: 3px;
+
+}
+
+.anket_header img{
+    width:100%;
+}
+
+.header{
+    width:100%;
+    height:70px;
+    background: #117441 no-repeat;
+}
+
+.header_img{
+    float:left;
+    background-color: whitesmoke;
+    border-radius:15%;
+    width:50px;
+    height:50px;
+    margin-right: 10px;
+    margin-top:5px;
+}
+
+.header_img img{
+    width:100%;
+    height:100%;
+    -webkit-border-radius:15%;
+    -moz-border-radius:15%;
+    border-radius:15%;
+}
+
+.header_title{
+    margin-left: 10px;
+    display: inline-block;
+    margin-top:5px;
+    text-align: left;
+}
+
+
+.anket_name{
+    float:left;
+    font-size: 29px;
+    color:white;
+    margin-right:10%;
+
+}
+
+.anket_yazar{
+    font-size: 16px;
+    color: #B7C8BE;
+    margin:0;
+    float: left;
+
+}
+
+
+
+/*Progress Bar*/
+.progress {
+    position: relative;
+    width: 100%;
+    height: 12px;
+    margin:auto;
+    display: block;
+    -webkit-appearance: none;
+    border: none;
+    box-shadow: 0 4px 20px -3px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0 4px 20px -3px rgba(0,0,0,0.75);
+    z-index:999;
+    background:#F1F1F1;
+
+}
+
+.progress#sonuc{
+    border-radius: 10px;
+    margin-bottom:10px;
+}
+
+.progress .value{
+    transition: width 0.5s ease-in-out;
+    position: absolute;
+    width:0;
+    height:100%;
+    background:#F7E71B;
+}
+
+.progress#sonuc .value{
+    background: #7ed221;
+    border-radius: 10px;
+}
+
+label.checkbox-image .progress#sonuc,
+label.radio-image .progress#sonuc{
+    margin:0;
+    border-radius: 0;
+
+}
+
+label.checkbox-image .progress#sonuc .value,
+label.radio-image .progress#sonuc .value{
+    border-radius: 0;
+}
+
+
+
+
+
+
+.loginform {
+    position:relative;
+    width: 100%;
+    margin: auto;
+    /* padding: 10px;*/
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .13);
+    background: white;
+}
+
+input {
+    outline: none;
+}
+
+#submit {
+    transition: 0.2s all;
+    width: 120px;
+    height: 53px;
+    border: 0;
+    color: white;
+    background: #117441;
+    cursor: pointer;
+    border-radius: 5px;
+    outline: 0;
+    font-size:17px;
+}
+
+#submit:hover {
+    background: #0085b0
+}
+
+#submit:active {
+    background: #016890
+}
+
+#submit:disabled {
+    background: #858b8e;
+    color: #cbd4da;
+}
+
+
+
+div#status {
+    padding: 15px;
+    color: white;
+    font-size: 17px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px;
+    display: none;
+}
+
+div#status.red {
+    background: #e8253a;
+}
+
+div#status.green {
+    background: #55874d;
+}
+
+#submit_button {
+    text-align: center
+}
+
+#myForm {
+    padding:15px;
+}
+
+.soru_head{
+    color:#373a3c;
+    width:100%;
+    padding-bottom:4px;
+    border-bottom:2px solid #565a5c;
+    margin:2px;
+}
+
+
+.radioBox{
+    width:100%;
+    height:100%;
+}
+
+.radioimg{
+    width:100%;
+    height:100%;
+    display: inline-block;
+}
+
+
+
+.radioLabel,
+.checkboxLabel
+{
+    font-family: sans-serif;
+    font-size:17px;
+    color:#373A3B;
+    height:100%;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+
+
+}
+
+.normal .radioLabel,.normal .checkboxLabel{
+    width:100%;
+    float:left;
+    padding:10px 0 10px 0;
+}
+
+
+.radio-image,.checkbox-image{
+    margin: 0 5px 0 5px;
+    padding:10px 0 0 0;
+}
+
+
+.radioLabel:before,
+.checkboxLabel:before{
+    content: '';
+    position: relative;
+    left: 3px;
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #cccccc;
+    margin-bottom:5px;
+    margin-right:8px;
+    border-radius: 100%;
+    float:left;
+
+
+}
+
+
+.radio-label:before{
+    border-radius: 100%;
+}
+
+.checkboxLabel:before{
+    border-radius: 2px;
+}
+
+input[type=radio] + .radio-image,input[type=checkbox] + .checkbox-image{
+    background: #EFEFEF;
+}
+
+input[type=radio]:checked + .radio-image,input[type=checkbox]:checked + .checkbox-image{
+    /*background: rgba(0, 155, 0, 0.55);*/
+
+}
+
+
+
+
+input[type=radio]:checked + .radioLabel:after,
+input[type=checkbox]:checked + .checkboxLabel:after{
+    content: '';
+    position: absolute;
+    top:14px;
+    left:7px;
+    display: block;
+    width: 11px;
+    height: 11px;
+    background: #cccccc;
+    margin-bottom:5px;
+    border-radius: 100%;
+
+}
+
+
+input[type=checkbox]:checked + .checkboxLabel:after{
+    border-radius: 2px;
+}
+
+
+input[type=radio]:checked + .radio-image:after{
+    border-radius: 100%;
+    top:14px;
+
+
+}
+
+input[type=checkbox]:checked + .checkbox-image:after{
+    border-radius: 2px;
+    top:14px;
+}
+
+input[type=checkbox],
+input[type=radio]{
+    position: absolute;
+    left:-9999999px;
+}
+
+
+div.sonuclar{
+    padding:5px;
+    height:100%;
+}
+
+div.outer{
+    background: white;
+    height:100%;
+    padding:5px;
+}
+div.normal p{
+    display: inline-block;
+    margin:0;
+}
+
+
+
+
+
