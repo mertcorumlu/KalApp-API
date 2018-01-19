@@ -10,6 +10,11 @@ error_reporting(0);
 $do=get("do");
 $hash=get("hash");
 
+if($do=="preview"){
+    include 'anket_preview.php';
+    exit;
+}
+
 if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" || $do=="anket_kaydet")){
     header('HTTP/1.0 403 Forbidden');
 
@@ -219,6 +224,8 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
 
 
     }
+
+
 
 
 

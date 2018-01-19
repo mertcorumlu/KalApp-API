@@ -465,21 +465,75 @@
 
                                 <div id="status" style="display:none;"></div>
 
-                                <form class="form-horizontal form-label-left" id="myForm" method="POST" action="inc/yazarapi.php?action=addyazar">
+                                <form class="form-horizontal form-label-left" id="myForm" method="POST" action="inc/anketapi.php?action=anket_ekle">
 
-                                    <span class="section">Yeni Yazar Ekle</span>
+
+                                    <span class="section">Yeni Anket Ekle
+                                    </span>
+
+                                    <div class="soru_group">
+
+                                        <div class="item form-group">
+
+                                            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="name">Anket Başlığı
+                                            </label>
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <input  class="form-control col-md-3 col-xs-12" required  name="anket_title" placeholder="Anket Başlığı"  type="text">
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                <select  style="float:left" class="form-control col-md-3 col-xs-12" required name="anket_yazar" >
+                                                    <option value="">Lütfen Seçin...</option>
+
+                                                    <?php
+                                                    error_reporting(E_ALL);
+
+                                                    //include("inc/config.php");
+                                                        $select = $Class_Database->prepare("SELECT * FROM `yazarlar`");
+
+                                                    $select->execute(array());
+
+
+                                                    if (!$select) {
+                                                        echo $select->errorInfo()[2];
+                                                        exit;
+                                                    }
+
+                                                    while($fetch=$select->fetch(PDO::FETCH_ASSOC)){
+                                                        ?>
+                                                        <option value="<?=$fetch["id"]?>"><?=$fetch["ad"]?></option>
+                                                    <?php
+                                                    }
+                                                    ?>
+
+
+                                                </select>
+                                            </div>
+                                            <div class="control-label col-md-3 col-sm-3 col-xs-12">
+                                                <button id="soru_ekle" class="btn btn-success">Soru Ekle</button>
+                                                <button id="soru_sil" class="btn btn-danger">Soru Sil</button>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="ln_solid"></div>
+
+
 
 
                                     <div class="soru_group" data-index="0">
 
                                     <div class="item form-group">
-                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="name">1.Soru <span class="required">*</span>
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="name">1.Soru
                                         </label>
                                         <div class="col-md-5 col-sm-5 col-xs-12">
-                                            <input  class="form-control col-md-3 col-xs-12" required  name="ad" placeholder="Yazar Adı"  type="text">
+                                            <input  class="form-control col-md-3 col-xs-12" required  name="soru[]" placeholder="Soru"  type="text">
                                         </div>
                                         <div class="col-md-3 col-sm-3 col-xs-12">
-                                            <select  style="float:left" class="selector form-control col-md-3 col-xs-12" data-index="0" required name="test[]" >
+                                            <select  style="float:left" class="selector form-control col-md-3 col-xs-12" data-index="0" required name="secenek[]" >
                                                 <option value="">Lütfen Seçin</option>
                                                 <option value="0">Text-Radio</option>
                                                 <option value="1">Image-Radio</option>
@@ -490,18 +544,10 @@
                                         </div>
                                     </div>
                                     <div class="divider"></div>
-
-
-
-
                                     </div>
 
-
-
-
-
                                     <div class="ln_solid"></div>
-                                    <div class="form-group">
+                                    <div class="form-group"  id="button-holder">
                                         <div class="col-md-6 col-md-offset-3">
                                             <button id="send" type="submit" class="btn btn-success">Submit</button>
                                             <a href="javascript:history.back(-1);">Go Back</a>
@@ -514,147 +560,8 @@
                     </div>
 
 
+              <script src="js/anket.js?v=1"></script>
                     <script>
-                        var soru_sayac;
-                       $(".selector").bind("change",function () {
-                           var delete_index=$(this).attr("data-index");
-                           if(this.value==""){
-                               alert("Lütfen Seçim Yapın");
-                               return;
-                           }
-                           var soru_group=$("div.soru_group[data-index="+$(this).attr("data-index")+"]");
-                           //Sıfırla
-
-                           $("div.sık[data-index="+$(this).attr("data-index")+"]").remove();
-                           soru_group.find(".item.form-group:first-child div.buton_div").remove();
-
-
-
-                           var placeholder;
-                           if(this.value!=""){
-
-                               switch (this.value){
-                                   case "0":
-                                       placeholder="Text";
-                                       break;
-
-                                   case "1":
-                                       placeholder="Url";
-
-                                       break;
-
-                                   case "2":
-                                       placeholder="Text";
-                                       break;
-
-                                   case "3":
-                                       placeholder="Url";
-                                       break;
-                               }
-
-
-
-                               var button_div=document.createElement("div");
-                               $(button_div).addClass("col-md-2").addClass("col-sm-2").addClass("col-xs-12").addClass("buton_div");
-
-                               var soru_add_button=document.createElement("button");
-                               $(soru_add_button).addClass("btn").addClass("btn-success");
-                               $(soru_add_button).attr("id","sık_ekle");
-                               soru_add_button.setAttribute("type","submit");
-                               $(soru_add_button).text("Şık Ekle");
-
-                               button_div.appendChild(soru_add_button);
-
-                                  soru_group.find(".item.form-group:first-child").append(button_div);
-
-                                  $("button#sık_ekle").bind("click",function (e) {
-                                      sık_ekle(soru_group,delete_index,placeholder);
-
-
-                                      return false;
-                                  });
-
-                                sık_ekle(soru_group,delete_index,placeholder);
-
-
-
-                           }
-
-                       });
-
-                       function sık_ekle(soru_group,delete_index,placeholder){
-                           var form_group=document.createElement("div")
-                           $(form_group).addClass("item").addClass("form-group").addClass("sık");
-                           form_group.setAttribute("data-index",delete_index)
-
-
-
-                           var label=document.createElement("label")
-                           $(label).addClass("control-label").addClass("col-md-2").addClass("col-md-2").addClass("col-xs-12");
-                           label.setAttribute("for","name");
-                           $(label).text("1.Şık");
-
-                           var input_div=document.createElement("div");
-                           $(input_div).addClass("col-md-4").addClass("col-sm-4").addClass("col-xs-12");
-
-                           var input=document.createElement("input");
-                           $(input).addClass("form-control").addClass("col-md-3").addClass("col-xs-12");
-                           input.setAttribute("type","text");
-                           input.setAttribute("name","bısey");
-                           input.setAttribute("required","");
-                           input.setAttribute("placeholder",placeholder);
-
-
-
-
-                           input_div.appendChild(input);
-
-                           form_group.appendChild(label);
-                           form_group.appendChild(input_div);
-
-
-
-                           soru_group.append(form_group);
-                       }
-
-
-
-                        var a = 2;
-
-                        function Ekleme() {
-                            a++;
-
-                            var formid = document.getElementById("ankettext");
-
-
-                            var element = document.createElement("input");
-                            element.setAttribute("type", "text");
-                            element.setAttribute("placeholder", "Secenek "+a);
-                            element.setAttribute("name", "secenek"+a );
-                            element.setAttribute("id", "text"+a);
-                            formid.appendChild(element);
-
-
-                        }
-
-                        function Silme() {
-                            var formid = document.getElementById("ankettext");
-                            var divsil = document.getElementById("text"+a);
-                            formid.removeChild(divsil);
-                            a--;
-                        }
-
-                        function Yazma() {
-                            var veriler = new Array();
-
-                            for (i=1;i<a+1;i++){
-                                veriler[i-1] = document.getElementById("text"+i).value;
-                                yazim = document.getElementById('yazimyeri');
-                            }
-                            yazim.innerHTML = veriler.join();
-                        }
-
-
                         $("button#send").click(function () {
                             $("div.loading").show();
 

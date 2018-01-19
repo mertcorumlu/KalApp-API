@@ -1,10 +1,11 @@
-body {
+body,html {
     font-family: Helvetica, serif;
     padding: 0;
     margin: 0;
     border: 0;
     outline: 0;
     background: #f1f1f1;
+    overflow-x: hidden;
 }
 
 div,input,p{

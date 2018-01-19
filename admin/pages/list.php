@@ -793,6 +793,72 @@
                         }
 
                         }
+                        elseif(@$_GET["action"]=="anket" && @$_GET["do"]==""){
+
+
+
+                            $bul = $Class_Database->query("SELECT anket.id,anket.title,yazarlar.ad as `yazar`,anket.content,anket.date FROM `anket` INNER JOIN `yazarlar` ON anket.author_id=yazarlar.id ORDER BY id DESC");
+                            if (!$bul) {
+                                echo $bul->errorInfo()[2];
+                            }
+
+
+                            ?>
+
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Kullanıcılar</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <table id="datatable-responsive"
+                                               class="table table-striped table-bordered dt-responsive nowrap"
+                                               cellspacing="0" width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Yazar</th>
+                                                <th>Title</th>
+                                                <th>Önizleme</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php
+                                            while ($data = $bul->fetch(PDO::FETCH_ASSOC)) {
+
+
+
+                                                ?>
+                                                <tr>
+                                                    <td><?=$data["id"]; ?></td>
+                                                    <td><?=$data["yazar"]; ?></td>
+                                                    <td><?=$data["title"]; ?></td>
+                                                    <td>
+                                                        <a href="/?action=anket&do=preview&content=<?=htmlspecialchars($data["content"])?>&title=<?=htmlspecialchars($data["title"])?>&yazar=<?=htmlspecialchars($data["yazar"])?>" target="_blank">Önizleme</a ></td>
+
+                                                    <td><a style="color:#55874d"
+                                                           href="?action=anket&do=update&id=<?=$data["id"]; ?>">Düzenle</a>
+                                                    </td>
+
+                                                </tr>
+                                                <?php
+                                            }
+                                            ?>
+
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <?php
+                        }
 
 
 
