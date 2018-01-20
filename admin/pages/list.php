@@ -839,8 +839,8 @@
                                                     <td>
                                                         <a href="/?action=anket&do=preview&content=<?=htmlspecialchars($data["content"])?>&title=<?=htmlspecialchars($data["title"])?>&yazar=<?=htmlspecialchars($data["yazar"])?>" target="_blank">Önizleme</a ></td>
 
-                                                    <td><a style="color:#55874d"
-                                                           href="?action=anket&do=update&id=<?=$data["id"]; ?>">Düzenle</a>
+                                                    <td><button id="del" data-id="<?=$data["id"]?>" class="btn btn-danger">Anketi Sil
+                                                        </button>
                                                     </td>
 
                                                 </tr>
@@ -988,6 +988,36 @@
         });
     </script>
     <!-- /Datatables -->
+
+    <script>
+        $("button#del").click(function (e) {
+            e.preventDefault();
+
+            if(confirm("Bu Anketi Silmek İstediğiniden Emin Misiniz?")){
+                $.get(
+                    "inc/anketapi.php?action=delete&id="+$(this).attr("data-id"),
+                    function (data) {
+                        if (data == false) {
+                            alert("Anket Başarıyla Silindi");
+                            window.location.replace("?action=anket")
+
+
+
+                        } else {
+                            alert(data);
+
+                        }
+                    }
+
+                );
+
+            }
+
+
+
+        });
+
+    </script>
     </body>
     </html>
         <?php

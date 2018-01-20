@@ -35,12 +35,13 @@ yazar_id = :yazar_id,
 title = :title,
 content = :content
 ");
-
+/*
                     $exec = $prepare->execute(array(
                         "yazar_id" => $yazar_id,
                         "title" => $title,
                         "content" => $content
-                    ));
+                    ));*/
+$exec=true;
 
 
                     if ($exec) {

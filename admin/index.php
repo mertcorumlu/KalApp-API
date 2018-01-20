@@ -16,7 +16,7 @@ if(@$_SESSION["admin"]==null){
 
 $page=@$_GET["page"];
 if(!isset($page)){
-    if($_GET["action"]==""){
+    if(@$_GET["action"]==""){
         $_GET["action"]="messages";
     }
     include 'pages/list.php';

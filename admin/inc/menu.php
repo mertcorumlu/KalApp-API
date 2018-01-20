@@ -38,6 +38,8 @@
                         <li><a href="?page=add&action=user">Yeni Kullanıcı Ekle</a></li>
                         <li><a href="?page=add&action=message">Yeni Duyuru Ekle</a></li>
                         <li><a href="?page=add&action=yazar">Yeni Yazar Ekle</a></li>
+                        <li><a href="?page=add&action=anket">Yeni Anket Ekle</a></li>
+
                     </ul>
                 </li>
 
@@ -46,6 +48,8 @@
                         <li><a href="?action=users">Kullanıcıları Listele</a></li>
                         <li><a href="?action=messages">Duyuruları Listele</a></li>
                         <li><a href="?action=yazarlar">Yazarları Listele</a></li>
+                        <li><a href="?action=anket">Anketleri Listele</a></li>
+
                     </ul>
                 </li>
 

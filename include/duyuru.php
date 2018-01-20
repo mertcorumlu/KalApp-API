@@ -7,7 +7,7 @@
  */
 
 header("Content-Type:application/json");
-
+sleep(10);
 
 $hash=get("hash");
 $s=get("s");

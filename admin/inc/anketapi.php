@@ -130,6 +130,25 @@ if($_GET){
 
 
     }
+    elseif ($_GET["action"]=="delete" && $_GET["id"]!=""){
+
+        $id=$_GET["id"];
+        $prepare = $Class_Database->prepare("DELETE FROM `anket` WHERE id=? ");
+
+        $exec_array=array(
+            $id
+        );
+
+        $exec = $prepare->execute($exec_array);
+
+        if ($exec) {
+            return false;
+        } else {
+            echo $prepare->errorInfo()[2];
+        }
+    }
+    /*
+
     elseif(@$_GET["action"]=="updateyazar" && @$_GET["start"]=="" && @$_GET["end"]==""){
 
         if ($_POST) {
@@ -175,22 +194,8 @@ img_url = :url WHERE id='{$id}' ");
 
 
     }
-    elseif ($_GET["action"]=="delete" && $_GET["id"]!=""){
 
-        $id=$_GET["id"];
-        $prepare = $Class_Database->prepare("DELETE FROM `yazarlar`WHERE id='{$id}' ");
-
-        $exec_array=array(
-        );
-
-        $exec = $prepare->execute($exec_array);
-
-        if ($exec) {
-            return false;
-        } else {
-            echo $prepare->errorInfo()[2];
-        }
-    }
+     */
 
 
 
