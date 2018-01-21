@@ -18,10 +18,6 @@ switch($get){
         $includepath= 'include/login.php';
         break;
 
-    case "auth":
-        $includepath= 'include/auth.php';
-        break;
-
     case "user_info":
         $includepath= 'include/user_info.php';
         break;
@@ -37,7 +33,7 @@ switch($get){
     default:
         header('HTTP/1.0 403 Forbidden');
 
-        die('You are not allowed to access this page!');
+        die("You are not allowed to access this page!");
 
         break;
 

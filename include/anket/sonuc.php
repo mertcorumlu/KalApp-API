@@ -47,7 +47,6 @@
 
 
             <?php
-            //var_dump($data);
             $index_name=0;
             foreach($data["content"] as $content){
 

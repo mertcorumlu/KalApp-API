@@ -362,7 +362,7 @@
 
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <h2>Kullanıcılar</h2>
+                                        <h2>Duyurular</h2>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="x_content">
@@ -588,7 +588,7 @@
 
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <h2>Kullanıcılar</h2>
+                                        <h2>Yazarlar</h2>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="x_content">
@@ -685,7 +685,7 @@
 
                                         <form class="form-horizontal form-label-left" id="myForm" method="POST" action="inc/yazarapi.php?action=updateyazar">
 
-                                            <span class="section">Duyuru Düzenle</span>
+                                            <span class="section">Yazar Düzenle</span>
 
                                             <p>Yazar ID : <?=$data["id"];  ?></p>
 
@@ -809,7 +809,7 @@
 
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <h2>Kullanıcılar</h2>
+                                        <h2>Anketler</h2>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="x_content">

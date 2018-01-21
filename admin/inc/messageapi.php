@@ -3,8 +3,9 @@ session_start();
 //error_reporting(0);
 
 if(@$_SESSION["admin"]==null){
-    echo 'Not Logged In';
-    exit;
+    header('HTTP/1.0 403 Forbidden');
+
+    die('You are not allowed to access this page!');
 }
 
 
@@ -35,13 +36,12 @@ yazar_id = :yazar_id,
 title = :title,
 content = :content
 ");
-/*
+
                     $exec = $prepare->execute(array(
                         "yazar_id" => $yazar_id,
                         "title" => $title,
                         "content" => $content
-                    ));*/
-$exec=true;
+                    ));
 
 
                     if ($exec) {
