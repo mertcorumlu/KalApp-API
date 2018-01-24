@@ -11,7 +11,7 @@ header("Content-Type:application/json");
 $hash=get("hash");
 $s=get("s");
 $count=get("f")-$s;
-
+sleep(2);
 if(empty($hash) ||  empty(get("f"))){
     header('HTTP/1.0 403 Forbidden');
 
@@ -30,7 +30,7 @@ if(empty($hash) ||  empty(get("f"))){
     }
 
 
-    $query=$Class_Database->query("SELECT messages.id,yazarlar.ad as `yazar`,yazarlar.img_url,messages.title,messages.content,messages.date FROM `messages` INNER JOIN `yazarlar` ON yazarlar.id = messages.yazar_id LIMIT {$count} OFFSET {$s}");
+    $query=$Class_Database->query("SELECT messages.id,yazarlar.ad as `yazar`,yazarlar.img_url,messages.title,messages.content,messages.content_img,messages.date FROM `messages` INNER JOIN `yazarlar` ON yazarlar.id = messages.yazar_id LIMIT {$count} OFFSET {$s}");
 
 
     if(!$query){
@@ -39,7 +39,7 @@ if(empty($hash) ||  empty(get("f"))){
     }
 
     if($query->rowCount()==0){
-        echo 'No Such Message!';
+        echo json_encode(array());
         exit;
     }
 
@@ -54,7 +54,8 @@ if(empty($hash) ||  empty(get("f"))){
                 "yazar"=>$fetch["yazar"],
                 "img_url"=>$fetch["img_url"],
                 "content"=>$fetch["content"],
-                "date"=>$fetch["date"]
+                "content_img"=>$fetch["content_img"],
+                "date"=>tarih_hesapla($fetch["date"])
 
             );
 
@@ -63,3 +64,58 @@ if(empty($hash) ||  empty(get("f"))){
         }
 
         echo json_encode($last);
+
+
+
+    function tarih_hesapla($date){
+
+
+    $unix=strtotime($date);
+    $seconds=time()-$unix;
+
+    if( $seconds < 60 /* Bir Dakikadan Küçükse */ ){
+
+        return $seconds." Saniye Önce";
+
+    }
+
+    elseif ( $seconds < 60*60 /* Bir Saatten Küçükse */ ){
+
+        return (int) ($seconds / 60)." Dakika Önce";
+
+    }
+
+    elseif ( $seconds < 60*60*24 /* Bir Günden Küçükse */ ){
+
+        return (int) ($seconds / (60*60) )." Saat Önce";
+
+    }
+
+    elseif ( $seconds < 60*60*24*7 /* Bir Haftadan Küçükse */ ){
+
+        return (int) ($seconds / (60*60*24) )." Gün Önce";
+
+    }
+
+    elseif ( $seconds < 60*60*24*30 /* Bir Aydan Küçükse */ ){
+
+        return (int) ($seconds / (60*60*24*7) )." Hafta Önce";
+
+    }
+
+
+    elseif ( $seconds < 60*60*24*30*12 /* Bir Yıldan Küçükse */ ){
+
+        return (int) ($seconds / (60*60*24*30) )." Ay Önce";
+
+    }else{
+
+        return (int) ($seconds / (60*60*24*30*12) )." Yıl Önce";
+
+    }
+
+
+
+
+
+}

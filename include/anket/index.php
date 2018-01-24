@@ -145,7 +145,7 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
     }
 
     if($query->rowCount()==0){
-        echo 'No Such Survey!';
+        echo json_encode(array());
         exit;
     }
 
