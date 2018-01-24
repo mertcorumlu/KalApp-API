@@ -30,6 +30,14 @@ switch($get){
         $includepath= 'include/duyuru.php';
         break;
 
+    case "search":
+        $includepath= 'include/search.php';
+        break;
+
+    case "yazarlar":
+        $includepath= 'include/yazarlar.php';
+        break;
+
     default:
         header('HTTP/1.0 403 Forbidden');
 

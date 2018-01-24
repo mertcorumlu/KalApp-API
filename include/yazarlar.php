@@ -9,9 +9,7 @@
 header("Content-Type:application/json");
 
 $hash=get("hash");
-$s=get("s");
-$count=get("f")-$s;
-if(empty($hash) ||  empty(get("f"))){
+if(empty($hash)){
     header('HTTP/1.0 403 Forbidden');
 
     die('You are not allowed to access this page!');
@@ -29,7 +27,7 @@ if(empty($hash) ||  empty(get("f"))){
     }
 
 
-    $query=$Class_Database->query("SELECT messages.id,yazarlar.ad as `yazar`,yazarlar.img_url,messages.title,messages.content,messages.content_img,messages.date FROM `messages` INNER JOIN `yazarlar` ON yazarlar.id = messages.yazar_id LIMIT {$count} OFFSET {$s}");
+    $query=$Class_Database->query("SELECT `ad` FROM `yazarlar` ");
 
 
     if(!$query){
@@ -48,14 +46,7 @@ if(empty($hash) ||  empty(get("f"))){
 
         while($fetch=$query->fetch(PDO::FETCH_ASSOC)){
             $data= array(
-                "id"=>$fetch["id"],
-                "title"=>$fetch["title"],
-                "yazar"=>$fetch["yazar"],
-                "img_url"=>$fetch["img_url"],
-                "content"=>$fetch["content"],
-                "content_img"=>$fetch["content_img"],
-                "date"=>tarih_hesapla($fetch["date"])
-
+                "yazar"=>$fetch["ad"],
             );
 
             array_push($last,$data);
