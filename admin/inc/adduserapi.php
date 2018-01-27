@@ -36,14 +36,14 @@ if($_GET){
 
 
                         $prepare = $Class_Database->prepare("UPDATE users SET
-okul_no = :okulno,
-class = :class,
-ad= :ad,
-soyad= :soyad,
-email= :email, 
-telefon= :telefon
-".@$prep_string." 
- WHERE id='{$id}' ");
+                okul_no = :okulno,
+                class = :class,
+                ad= :ad,
+                soyad= :soyad,
+                email= :email, 
+                telefon= :telefon
+                ".@$prep_string." 
+                 WHERE id='{$id}' ");
 
 
                             $exec_array=array(

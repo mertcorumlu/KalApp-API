@@ -1,6 +1,10 @@
 <?php
 
+if(@$_SESSION["admin"]==null){
+    header('HTTP/1.0 403 Forbidden');
 
+    die('You are not allowed to access this page!');
+}
         ?>
 
 

@@ -19,6 +19,7 @@
 
 <body>
 <div class="login">
+    <div class="loading"></div>
 
     <div class="anket_header">
 
@@ -49,7 +50,6 @@
         <div id="status"></div>
 
         <?php
-         //var_dump($data);
         $index_name=0;
          foreach($data["content"] as $content){
 
@@ -212,7 +212,7 @@
                 function (data) {
 
                     if (data == false) {
-                        location.reload();
+                        document.location.reload(true);
 
                     } else {
                         $("html, body").animate({ scrollTop: 0 }, "slow");

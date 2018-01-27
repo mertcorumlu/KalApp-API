@@ -158,6 +158,7 @@
 <script src="include/anket/js/slick.min.js"></script>
 <script>
 $(document).ready(function () {
+    $("html, body").animate({ scrollTop: 0 }, "slow");
     $('div.slick').slick({
         centerMode: true,
         centerPadding: '50px',

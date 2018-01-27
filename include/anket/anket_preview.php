@@ -45,7 +45,7 @@
 
 
 
-        <form id="myForm" action="?action=anket&do=anket_kaydet&hash=<?=$hash?>&anket_id=<?=$id?>" method="POST">
+        <form id="myForm" action="" method="POST">
             <div id="status"></div>
 
             <?php

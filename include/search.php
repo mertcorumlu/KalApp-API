@@ -35,7 +35,7 @@ if($ans==false){
 
     if($action=="duyuru"){
 
-        $query=$Class_Database->query(
+        $query=$Class_Database->prepare(
             "SELECT
               messages.id,
               yazarlar.ad AS `yazar`,
@@ -51,20 +51,36 @@ if($ans==false){
             ON
               yazarlar.id = messages.yazar_id
             WHERE
-              messages.content LIKE '%{$q}%' OR 
-              messages.title LIKE '%{$q}%' OR 
-              yazarlar.ad LIKE '%{$q}%' 
-              LIMIT {$count} OFFSET {$s}
+              messages.content LIKE CONCAT('%',?,'%') OR 
+              messages.title LIKE CONCAT('%',?,'%') OR 
+              yazarlar.ad LIKE CONCAT('%',?,'%') 
+              LIMIT ? OFFSET ?
               ");
 
+        if(!$query) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
 
-        if(!$query){
-            echo $Class_Database->errorInfo()[2];
             exit;
         }
 
+        $query->execute(array($q,$q,$q,$count,$s));
+
         if($query->rowCount()==0){
-            echo json_encode(array());
+            echo json_encode(array(array(
+                "id"=>0,
+                "title"=>null,
+                "yazar"=>null,
+                "img_url"=>null,
+                "content"=>"'".get("q")."' İçin Bir Şey Bulunamadı.'",
+                "content_img"=>null,
+                "date"=>null
+
+            )));
             exit;
         }
 
@@ -96,7 +112,7 @@ if($ans==false){
     else if($action=="anket"){
 
 
-        $query=$Class_Database->query(
+        $query=$Class_Database->prepare(
             "SELECT
               anket.id,
               anket.title,
@@ -111,19 +127,35 @@ if($ans==false){
             ON
               yazarlar.id = anket.author_id
               WHERE 
-               yazarlar.ad LIKE '%{$q}%'
-            LIMIT {$count} OFFSET {$s}
+               yazarlar.ad LIKE CONCAT('%',?,'%')
+            LIMIT ? OFFSET ?
               ");
 
 
 
-        if(!$query){
-            echo $Class_Database->errorInfo()[2];
+        if(!$query) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
+
             exit;
         }
 
+        $query->execute(array($q,$count,$s));
+
         if($query->rowCount()==0){
-            echo json_encode(array());
+            echo json_encode(array(array(
+                "id"=>0,
+                "title"=>"'".get("q")."' İçin Bir Şey Bulunamadı.'",
+                "yazar"=>null,
+                "voted"=>0,
+                "img_url"=>null,
+                "date"=>null
+
+            )));
             exit;
         }
 
@@ -132,26 +164,40 @@ if($ans==false){
 
 
         while($fetch=$query->fetch(PDO::FETCH_ASSOC)){
-            $query1=$Class_Database->query("SELECT * FROM `anket_sonuc` WHERE `anket_id`='{$fetch["id"]}' && `user_id`='{$ans}' ");
-            if(!$query1){
-                echo $Class_Database->errorInfo()[2]."\n";
+            $query1=$Class_Database->prepare("SELECT * FROM `anket_sonuc` WHERE `anket_id`=? && `user_id`=? ");
+
+
+            if(!$query1) {
+                echo json_encode(
+                    array(
+                        "valid" => false,
+                        "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                    )
+                );
+
                 exit;
             }
-            $voted=0;
-            if($query1->rowCount()>0){
-                $voted=1;
-            }
-            $data= array(
-                "id"=>$fetch["id"],
-                "title"=>$fetch["title"],
-                "yazar"=>$fetch["yazar"],
-                "voted"=>$voted,
-                "img_url"=>$fetch["img_url"],
-                "date"=>$fetch["date"]
 
-            );
+            $query1->execute(array($fetch["id"],$ans));
+
+                        $voted=0;
+
+                        if($query1->rowCount()>0) {
+                            $voted = 1;
+                        }
+
+                        $data= array(
+                            "id"=>$fetch["id"],
+                            "title"=>$fetch["title"],
+                            "yazar"=>$fetch["yazar"],
+                            "voted"=>$voted,
+                            "img_url"=>$fetch["img_url"],
+                            "date"=>$fetch["date"]
+
+                        );
 
             array_push($last,$data);
+
 
         }
 
@@ -167,60 +213,3 @@ if($ans==false){
         die('You are not allowed to access this page!');
     }
 
-
-
-
-
-
-function tarih_hesapla($date){
-
-
-    $unix=strtotime($date);
-    $seconds=time()-$unix;
-
-    if( $seconds < 60 /* Bir Dakikadan Küçükse */ ){
-
-        return $seconds." Saniye Önce";
-
-    }
-
-    elseif ( $seconds < 60*60 /* Bir Saatten Küçükse */ ){
-
-        return (int) ($seconds / 60)." Dakika Önce";
-
-    }
-
-    elseif ( $seconds < 60*60*24 /* Bir Günden Küçükse */ ){
-
-        return (int) ($seconds / (60*60) )." Saat Önce";
-
-    }
-
-    elseif ( $seconds < 60*60*24*7 /* Bir Haftadan Küçükse */ ){
-
-        return (int) ($seconds / (60*60*24) )." Gün Önce";
-
-    }
-
-    elseif ( $seconds < 60*60*24*30 /* Bir Aydan Küçükse */ ){
-
-        return (int) ($seconds / (60*60*24*7) )." Hafta Önce";
-
-    }
-
-
-    elseif ( $seconds < 60*60*24*30*12 /* Bir Yıldan Küçükse */ ){
-
-        return (int) ($seconds / (60*60*24*30) )." Ay Önce";
-
-    }else{
-
-        return (int) ($seconds / (60*60*24*30*12) )." Yıl Önce";
-
-    }
-
-
-
-
-
-}

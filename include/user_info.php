@@ -6,8 +6,6 @@
  * Time: 19:41
  */
 
-
-header("Content-Type:application/json");
 $hash=get("hash");
 
 if(!($hash)){
@@ -16,19 +14,37 @@ if(!($hash)){
     die('You are not allowed to access this page!');
 }
 
+//header("Content-Type:application/json");
+
 $ans=$Auth->getSessionUID($hash);
 if($ans==false){
-    echo json_encode(array("valid"=>false));
+    echo json_encode(array("valid"=>false,"message"=>"This Hash Is Not Valid."));
     exit;
 }
 
-$query=$Class_Database->query("SELECT `okul_no`,`ad`,`soyad`,`telefon`,`email`,`dt` FROM `users` WHERE id=".$ans." LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    $query=$Class_Database->prepare("
+                                   SELECT 
+                                    `okul_no`,`ad`,`soyad`,`profile_img` as `img_url`,`telefon`,`email`,`dt` 
+                                   FROM 
+                                    `users` 
+                                    WHERE 
+                                      id=?
+                                    LIMIT 1
+                                      ");
 
-if(!$query) {
-    echo json_encode(array("valid" => false, "error" => $Class_Database->errorInfo()[2]));
-    exit;
+    if(!$query) {
+        echo json_encode(
+            array(
+                "valid" => false,
+                "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+        );
 
-}
+        exit;
+    }
 
-$query["valid"]=true;
-echo json_encode($query);
+    $query->execute(array($ans));
+    $query=$query->fetch(PDO::FETCH_ASSOC);
+
+    $query["valid"]=true;
+    echo json_encode($query);

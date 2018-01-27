@@ -6,7 +6,6 @@
  * Time: 10:28
  */
 
-error_reporting(0);
 $do=get("do");
 $hash=get("hash");
 
@@ -24,6 +23,7 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
 
 
     if($do=="anket_getir" && !empty(get("id"))){
+
             $id=get("id");
 
 
@@ -38,16 +38,41 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
             }
 
 
-        $query=$Class_Database->query("SELECT anket.id, anket.title, yazarlar.ad AS `yazar`, yazarlar.img_url, anket.content, anket.date FROM `anket` INNER JOIN `yazarlar` ON yazarlar.id = anket.author_id WHERE anket.id={$id} LIMIT 1");
+        $query=$Class_Database->prepare("
+        SELECT
+          anket.id, anket.title, yazarlar.ad AS `yazar`, yazarlar.img_url, anket.content, anket.date 
+        FROM 
+          `anket` 
+        INNER JOIN 
+          `yazarlar` 
+        ON 
+          yazarlar.id = anket.author_id
+        WHERE 
+          anket.id=? LIMIT 1
+          ");
 
 
-        if(!$query){
-            echo $Class_Database->errorInfo()[2];
+        if(!$query) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
+
             exit;
         }
 
+
+        $query->execute(array($id));
+
         if($query->rowCount()==0){
-            echo 'No Such Survey!';
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "No Such Survey"
+                )
+            );
             exit;
         }
 
@@ -67,19 +92,36 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
 
             );
 
-        $query1=$Class_Database->query("SELECT * FROM `anket_sonuc` WHERE `anket_id`='{$id}' && `user_id`='{$ans}' ");
-        if(!$query1){
-            echo $Class_Database->errorInfo()[2]."\n";
+        $query1=$Class_Database->prepare("SELECT * FROM `anket_sonuc` WHERE `anket_id`=? && `user_id`=? ");
+
+        if(!$query1) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
+
             exit;
         }
+
+       $query1->execute(array($id,$ans));
+
         if($query1->rowCount()>0){
             $sayac=array();
 
-            $query2=$Class_Database->query("SELECT `post` FROM `anket_sonuc` WHERE `anket_id`='{$id}'");
-            if(!$query2){
-                echo $Class_Database->errorInfo()[2]."\n";
+            $query2=$Class_Database->prepare("SELECT `post` FROM `anket_sonuc` WHERE `anket_id`=? ");
+            if(!$query2) {
+                echo json_encode(
+                    array(
+                        "valid" => false,
+                        "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                    )
+                );
+
                 exit;
             }
+            $query2->execute(array($id));
 
             $toplam=$query2->rowCount();
 
@@ -90,12 +132,12 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
 
                     for($j=0;$j<count($data["content"][$i]->options);$j++){
 
-                        if($sayac[$i][$j]==null){
+                        if(@$sayac[$i][$j]==null){
                             $sayac[$i][$j]=0;
                         }
 
-                        if($main[$j]!=null){
-                            $sayac[$i][$main[$j]]+=1;
+                        if(@$main[$j]!=null){
+                            @$sayac[$i][$main[$j]] += 1;
 
                         }
 
@@ -136,16 +178,41 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
     }
 
 
-    $query=$Class_Database->query("SELECT anket.id, anket.title, yazarlar.ad AS `yazar`, yazarlar.img_url, anket.content, anket.date FROM `anket` INNER JOIN `yazarlar` ON yazarlar.id = anket.author_id LIMIT {$count} OFFSET {$s}");
+    $query=$Class_Database->prepare("
+            SELECT 
+              anket.id, anket.title, yazarlar.ad AS `yazar`, yazarlar.img_url, anket.content, anket.date 
+            FROM 
+              `anket` 
+            INNER JOIN 
+              `yazarlar` 
+            ON 
+              yazarlar.id = anket.author_id 
+            LIMIT ? OFFSET ? ");
 
 
-    if(!$query){
-        echo $Class_Database->errorInfo()[2];
-        exit;
-    }
+        if(!$query) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
+
+            exit;
+        }
+
+        $query->execute(array($count,$s));
 
     if($query->rowCount()==0){
-        echo json_encode(array());
+        echo json_encode(array(array(
+            "id"=>0,
+            "title"=>"Buraya Kadarmış Dostum :)",
+            "yazar"=>null,
+            "voted"=>0,
+            "img_url"=>null,
+            "date"=>null
+
+        )));
         exit;
     }
 
@@ -154,11 +221,22 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
 
 
     while($fetch=$query->fetch(PDO::FETCH_ASSOC)){
-        $query1=$Class_Database->query("SELECT * FROM `anket_sonuc` WHERE `anket_id`='{$fetch["id"]}' && `user_id`='{$ans}' ");
-        if(!$query1){
-            echo $Class_Database->errorInfo()[2]."\n";
+
+        $query1=$Class_Database->prepare("SELECT * FROM `anket_sonuc` WHERE `anket_id`=? && `user_id`=? ");
+
+        if(!$query1) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
+
             exit;
         }
+
+        $query1->execute(array($fetch["id"],$ans));
+
         $voted=0;
         if($query1->rowCount()>0){
             $voted=1;
@@ -185,6 +263,7 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
 }
 
     elseif($do=="anket_kaydet" && !empty(get("anket_id"))){
+    sleep(3);
      /*
      * Kullanıcı Hash Kontrol Et
      */
@@ -198,25 +277,39 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
         $content=json_encode($_POST);
 
 
-        $query=$Class_Database->query("SELECT * FROM `anket_sonuc` WHERE `anket_id`='{$anket_id}' && `user_id`='{$ans}' ");
-        if(!$query){
-            echo $Class_Database->errorInfo()[2]."\n";
+        $query=$Class_Database->prepare("SELECT * FROM `anket_sonuc` WHERE `anket_id`=? && `user_id`=? ");
+
+        if(!$query) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
+
             exit;
         }
+        $query->execute(array($anket_id,$ans));
+
         if($query->rowCount()>0){
             echo 'Daha Önce Oy Kullanmış';
             exit;
         }
 
 
-            $query=$Class_Database->query("INSERT INTO `anket_sonuc` (`anket_id`, `user_id`, `post`) VALUES ('{$anket_id}','{$ans}','{$content}')");
-        if(!$query){
-            echo $Class_Database->errorInfo()[2]."\n";
+            $query=$Class_Database->prepare("INSERT INTO `anket_sonuc` (`anket_id`, `user_id`, `post`) VALUES (?,?,?)");
+        if(!$query) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
 
             exit;
         }
 
-
+        $query->execute(array($anket_id,$ans,$content));
 
 
 
@@ -226,13 +319,7 @@ if(empty($hash) || empty($do) || !($do=="anketleri_getir" || $do=="anket_getir" 
     }
 
 
-
-
-
-
-
-
-else{
+    else{
         header('HTTP/1.0 403 Forbidden');
 
         die('You are not allowed to access this page!');

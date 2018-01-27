@@ -27,13 +27,20 @@ if(empty($hash)){
     }
 
 
-    $query=$Class_Database->query("SELECT `ad` FROM `yazarlar` ");
+    $query=$Class_Database->prepare("SELECT `ad`,`img_url` FROM `yazarlar` ");
 
 
-    if(!$query){
-        echo $Class_Database->errorInfo()[2];
-        exit;
-    }
+        if(!$query) {
+            echo json_encode(
+                array(
+                    "valid" => false,
+                    "error" => "SQL Error Code: ".$Class_Database->errorInfo()[1]
+                )
+            );
+
+            exit;
+        }
+        $query->execute();
 
     if($query->rowCount()==0){
         echo json_encode(array());
@@ -47,6 +54,7 @@ if(empty($hash)){
         while($fetch=$query->fetch(PDO::FETCH_ASSOC)){
             $data= array(
                 "yazar"=>$fetch["ad"],
+                "img_url"=>$fetch["img_url"]
             );
 
             array_push($last,$data);
@@ -54,58 +62,3 @@ if(empty($hash)){
         }
 
         echo json_encode($last);
-
-
-
-    function tarih_hesapla($date){
-
-
-    $unix=strtotime($date);
-    $seconds=time()-$unix;
-
-    if( $seconds < 60 /* Bir Dakikadan Küçükse */ ){
-
-        return $seconds." Saniye Önce";
-
-    }
-
-    elseif ( $seconds < 60*60 /* Bir Saatten Küçükse */ ){
-
-        return (int) ($seconds / 60)." Dakika Önce";
-
-    }
-
-    elseif ( $seconds < 60*60*24 /* Bir Günden Küçükse */ ){
-
-        return (int) ($seconds / (60*60) )." Saat Önce";
-
-    }
-
-    elseif ( $seconds < 60*60*24*7 /* Bir Haftadan Küçükse */ ){
-
-        return (int) ($seconds / (60*60*24) )." Gün Önce";
-
-    }
-
-    elseif ( $seconds < 60*60*24*30 /* Bir Aydan Küçükse */ ){
-
-        return (int) ($seconds / (60*60*24*7) )." Hafta Önce";
-
-    }
-
-
-    elseif ( $seconds < 60*60*24*30*12 /* Bir Yıldan Küçükse */ ){
-
-        return (int) ($seconds / (60*60*24*30) )." Ay Önce";
-
-    }else{
-
-        return (int) ($seconds / (60*60*24*30*12) )." Yıl Önce";
-
-    }
-
-
-
-
-
-}

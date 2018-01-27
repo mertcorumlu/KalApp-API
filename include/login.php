@@ -5,10 +5,6 @@
  * Date: 13/10/2017
  * Time: 18:50
  */
- 
-
-
-header("Content-Type:application/json");
 
 $okulno=get("okul_no");
 $pass=get("pass");
@@ -20,4 +16,7 @@ if(empty($okulno) || empty($pass) || empty($cms_token)){
 
     die('You are not allowed to access this page!');
 }
+
+header("Content-Type:application/json");
+
 echo json_encode($Auth->login_okulno($okulno,$pass,1,$cms_token));

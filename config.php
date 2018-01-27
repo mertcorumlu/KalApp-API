@@ -24,6 +24,9 @@ try{
         ";charset=" . $db_charset . "",
         $db_user,
         $db_pass);
+
+    $Class_Database->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
+
 }catch(PDOException $e){
     echo $e->getMessage();
     exit;

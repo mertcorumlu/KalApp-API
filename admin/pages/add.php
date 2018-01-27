@@ -6,7 +6,16 @@
 
 
 <!-- head -->
-<?php require("inc/head.php"); ?>
+<?php
+if(@$_SESSION["admin"]==null){
+    header('HTTP/1.0 403 Forbidden');
+
+    die('You are not allowed to access this page!');
+}
+
+require("inc/head.php");
+
+?>
 <!-- /head -->
 
   <body class="nav-md">
@@ -277,6 +286,14 @@
                                         </div>
                                     </div>
 
+
+                                    <div class="item form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="content_img">Resim URL </span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="text" id="content" class="form-control col-md-7 col-xs-12"  name="content_img" placeholder="URL" />
+                                        </div>
+                                    </div>
 
 
                                     <div class="item form-group">

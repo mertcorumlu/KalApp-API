@@ -5,7 +5,13 @@
 
 
     <!-- head -->
-    <?php require("inc/head.php"); ?>
+    <?php
+    if(@$_SESSION["admin"]==null){
+        header('HTTP/1.0 403 Forbidden');
+
+        die('You are not allowed to access this page!');
+    }
+    require("inc/head.php"); ?>
     <!-- Datatables -->
     <link href="vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <link href="vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
@@ -37,7 +43,7 @@
                         if(@$_GET["action"]=="users" && @$_GET["do"]=="") {
 
 
-                                //include("inc/config.php");
+
 
                                     $bul = $Class_Database->query("SELECT * FROM users");
                                     if (!$bul) {
@@ -109,10 +115,13 @@
 
                             $id= $_GET["id"];
 
-                            $bul = $Class_Database->query("SELECT * FROM users WHERE id='{$id}' ");
+                            $bul = $Class_Database->prepare("SELECT * FROM users WHERE id=? ");
+
                             if (!$bul) {
                                 echo $Class_Database->errorInfo()[2];
                             }
+
+                            $bul->execute(array($id));
 
                             if($bul->rowCount()>0) {
 
@@ -350,7 +359,7 @@
 
 
 
-                                $bul = $Class_Database->query("SELECT messages.id,yazarlar.ad as `yazar`,yazarlar.img_url,messages.title,messages.content,messages.date FROM `messages` INNER JOIN `yazarlar` ON yazarlar.id = messages.yazar_id ORDER BY id DESC");
+                                $bul = $Class_Database->query("SELECT messages.id,yazarlar.ad as `yazar`,yazarlar.img_url,messages.title,messages.content_img,messages.content,messages.date FROM `messages` INNER JOIN `yazarlar` ON yazarlar.id = messages.yazar_id ORDER BY id DESC");
                                 if (!$bul) {
                                     echo $bul->errorInfo()[2];
                                 }
@@ -375,6 +384,7 @@
                                                 <th>Tarih</th>
                                                 <th>Yazar</th>
                                                 <th>Başlık</th>
+                                                <th>İçerik Resmi</th>
                                                 <th>İçerik</th>
                                                 <th>Action</th>
                                             </tr>
@@ -391,6 +401,7 @@
                                                     <td><?php echo $data["date"]; ?></td>
                                                     <td><?php echo $data["yazar"]; ?></td>
                                                     <td><?php echo $data["title"]; ?></td>
+                                                    <td><a href="<?php echo $data["content_img"]; ?>" target="_blank" ><?php echo $data["content_img"]; ?></a></td>
                                                     <td><?php echo $data["content"]; ?></td>
                                                     <td><a style="color:#55874d"
                                                            href="?action=messages&do=update&id=<?php echo $data["id"]; ?>">Düzenle</a>
@@ -417,13 +428,14 @@
                             $id= $_GET["id"];
 
 
-                                $bul = $Class_Database->query("SELECT messages.id,yazarlar.ad as `yazar`,yazarlar.img_url,messages.title,messages.content,messages.date FROM `messages` INNER JOIN `yazarlar` ON yazarlar.id = messages.yazar_id WHERE messages.id='{$id}' ");
+                                $bul = $Class_Database->prepare("SELECT messages.id,yazarlar.ad as `yazar`,yazarlar.img_url,messages.title,messages.content_img,messages.content,messages.date FROM `messages` INNER JOIN `yazarlar` ON yazarlar.id = messages.yazar_id WHERE messages.id=? ");
                                 if (!$bul) {
 
                                     echo $Class_Database->errorInfo()[2];
 
                                 }
 
+                        $bul->execute(array($id));
 
 
                             if($bul->rowCount()>0) {
@@ -480,6 +492,14 @@
                                                 </div>
                                             </div>
 
+
+                                            <div class="item form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="content_img">Resim URL </span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <input type="text" id="content" class="form-control col-md-7 col-xs-12"  name="content_img" placeholder="URL" value="<?php echo $data["content_img"];  ?>"/>
+                                                </div>
+                                            </div>
 
 
                                             <div class="item form-group">
@@ -639,13 +659,14 @@
                             $id= $_GET["id"];
 
 
-                            $bul = $Class_Database->query("SELECT * FROM `yazarlar` WHERE id='{$id}' ");
+                            $bul = $Class_Database->prepare("SELECT * FROM `yazarlar` WHERE id=? ");
                             if (!$bul) {
 
                                 echo $Class_Database->errorInfo()[2];
 
                             }
 
+                            $bul->execute(array($id));
 
 
                             if($bul->rowCount()>0) {

@@ -1,19 +1,19 @@
 <?php
 $lang = array();
 
-$lang['user_blocked'] = "You are currently locked out of the system.";
+$lang['user_blocked'] = "Çok Fazla Denemede Bulunduğunuz İçin Sistemden Geçici Olarak Uzaklaştırıldınız.Lütfen 5 Dakika Sonra Tekrar Deneyiniz.";
 $lang['user_verify_failed'] = "Captcha Code was invalid.";
 
-$lang['email_password_invalid'] = "Email address / password are invalid.";
-$lang['email_password_incorrect'] = "Email address / password are incorrect.";
+$lang['email_password_invalid'] = "Okul Numaranız / Şifreniz Geçersiz.";
+$lang['email_password_incorrect'] = "Okul Numaranız / Şifreniz Hatalı.";
 $lang['remember_me_invalid'] = "The remember me field is invalid.";
 
-$lang['password_short'] = "Password is too short.";
-$lang['password_weak'] = "Password is too weak.";
+$lang['password_short'] = "Şifreniz Çok Kısa.";
+$lang['password_weak'] = "Şifreniz Çok Zayıf.";
 $lang['password_nomatch'] = "Passwords do not match.";
-$lang['password_changed'] = "Password changed successfully.";
-$lang['password_incorrect'] = "Current password is incorrect.";
-$lang['password_notvalid'] = "Password is invalid.";
+$lang['password_changed'] = "Şifre Başarıyla Değiştirildi.";
+$lang['password_incorrect'] = "Şu Anki Şifreniz Geçersiz.";
+$lang['password_notvalid'] = "Şifre Geçersiz.";
 
 $lang['newpassword_short'] = "New password is too short.";
 $lang['newpassword_long'] = "New password is too long.";
@@ -33,10 +33,10 @@ $lang['newemail_match'] = "New email matches previous email.";
 $lang['account_inactive'] = "Account has not yet been activated.";
 $lang['account_activated'] = "Account activated.";
 
-$lang['logged_in'] = "You are now logged in.";
-$lang['logged_out'] = "You are now logged out.";
+$lang['logged_in'] = "Şu Anda Giriş Yaptınız.";
+$lang['logged_out'] = "Başarıyla Çıkış Yaptınız.";
 
-$lang['system_error'] = "A system error has been encountered. Please try again.";
+$lang['system_error'] = "Sistemde Bir Hata Oluştu.Lütfen Daha Sonra Tekrar Deneyiniz.\n Hata Kodu :";
 
 $lang['register_success'] = "Account created. Activation email sent to email.";
 $lang['register_success_emailmessage_suppressed'] = "Account created.";

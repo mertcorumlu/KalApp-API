@@ -1,5 +1,7 @@
 <?php
 
 
+$image=$_POST["image"];
 
-echo tarih_hesapla("018-01-21 20:59:24");
+$decoded_img=base64_decode($image);
+file_put_contents("b.jpg",$decoded_img);

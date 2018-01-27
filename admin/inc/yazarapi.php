@@ -30,9 +30,9 @@ if($_GET){
 
 
                 $prepare = $conn->prepare("INSERT INTO `yazarlar` SET
-ad = :ad,
-img_url = :url
-");
+                        ad = :ad,
+                        img_url = :url
+                        ");
 
                 $exec = $prepare->execute(array(
                     "ad" => $ad,

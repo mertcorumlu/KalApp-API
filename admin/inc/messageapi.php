@@ -25,22 +25,28 @@ if($_GET){
                 $content =@$_POST["content"];
                 $notify=@$_POST["notify"];
                 $yazar_id = @$_POST["yazar_id"];
+                $content_img = NULL;
 
+                if(!empty($_POST["content_img"])){
+                    $content_img = @$_POST["content_img"];
+                }
 
 
                 if (!empty($title) && !empty($content) && !empty($yazar_id)) {
 
 
                     $prepare = $conn->prepare("INSERT INTO `messages` SET
-yazar_id = :yazar_id,
-title = :title,
-content = :content
-");
+                                                            yazar_id = :yazar_id,
+                                                            title = :title,
+                                                            content = :content,
+                                                            content_img = :img
+                                                            ");
 
                     $exec = $prepare->execute(array(
                         "yazar_id" => $yazar_id,
                         "title" => $title,
-                        "content" => $content
+                        "content" => $content,
+                        "img"=>$content_img
                     ));
 
 
@@ -138,6 +144,12 @@ content = :content
                 $content=@$_POST["content"];
                 $title = ucwords(trim(@$_POST["title"]));
                 $id=@$_POST["id"];
+                $content_img = NULL;
+
+                if(!empty($_POST["content_img"])){
+                    $content_img = @$_POST["content_img"];
+                }
+
 
 
 
@@ -146,12 +158,15 @@ content = :content
 
 
                         $prepare = $conn->prepare("UPDATE messages SET
-title = :title,
-content = :content WHERE id='{$id}' ");
+                    title = :title,
+                    content = :content,
+                    content_img = :img
+                     WHERE id='{$id}' ");
 
                         $exec = $prepare->execute(array(
                             "title" => $title,
-                            "content" => $content
+                            "content" => $content,
+                            "img"=>$content_img
                         ));
 
                         if ($exec) {
